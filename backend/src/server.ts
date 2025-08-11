@@ -4,7 +4,7 @@ import { createServer } from 'http';
 import { Server } from 'socket.io';
 import { rounds } from './lib/round-manager';
 import { fetchQuestions } from './lib/trivia';
-import { Answer } from './types/models';
+import type { Answer } from './types/models';
 
 export function buildServer() {
   const app = Fastify({ logger: true });
