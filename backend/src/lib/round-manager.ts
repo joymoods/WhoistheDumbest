@@ -67,7 +67,7 @@ export class RoundManager {
       for (const q of round.questions) {
         const ans = p.answers[q.id];
         if (!ans) continue;
-        if (q.type === 'single' || q.type === 'boolean') {
+        if ((q.type === 'single' || q.type === 'boolean') && q.correct !== undefined) {
           if (ans.payload === q.correct) points += 1;
         }
       }
