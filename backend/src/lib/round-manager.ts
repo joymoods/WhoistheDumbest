@@ -1,4 +1,4 @@
-import { Round, RoundSettings, Player, Question, Answer } from '../types/models';
+import type { Round, RoundSettings, Player, Question, Answer } from '../types/models';
 import { v4 as uuid } from 'uuid';
 
 export class RoundManager {
