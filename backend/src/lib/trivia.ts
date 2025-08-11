@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Question } from '../types/models';
+import type { Question } from '../types/models.js';
 import he from 'he';
 import { v4 as uuid } from 'uuid';
 
@@ -17,22 +17,23 @@ function normalizeQuestion(q: any): Question {
     type: q.type === 'boolean' ? 'boolean' : 'single',
     text: he.decode(q.question),
     options: [],
-    correct: undefined,
   };
   if (question.type === 'boolean') {
     question.options = [
       { id: 'true', text: 'True' },
       { id: 'false', text: 'False' },
     ];
-    question.correct = q.correct_answer.toLowerCase();
+  question.correct = q.correct_answer ? q.correct_answer.toLowerCase() : undefined;
   } else {
     const answers = [q.correct_answer, ...q.incorrect_answers].map((a: string) => he.decode(a));
     question.options = answers.map((text) => ({ id: uuid(), text }));
-    question.correct = question.options[0].id;
-    if (answers.length > 0) {
+    if (question.options.length > 0) {
+      if (question.options[0]) {
+        question.correct = question.options[0].id;
+      }
       // match correct by value
       const correctText = he.decode(q.correct_answer);
-      const correctOpt = question.options.find((o) => o.text === correctText);
+      const correctOpt = question.options.find((o: { id: string; text: string }) => o.text === correctText);
       if (correctOpt) question.correct = correctOpt.id;
     }
   }

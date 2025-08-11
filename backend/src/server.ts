@@ -2,9 +2,9 @@ import Fastify from 'fastify';
 import fastifyCors from '@fastify/cors';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
-import { rounds } from './lib/round-manager';
-import { fetchQuestions } from './lib/trivia';
-import type { Answer } from './types/models';
+import { rounds } from './lib/round-manager.js';
+import { fetchQuestions } from './lib/trivia.js';
+import type { Answer } from './types/models.js';
 
 export function buildServer() {
   const app = Fastify({ logger: true });
@@ -53,7 +53,7 @@ export function buildServer() {
       const qs = await fetchQuestions(round.settings.numQuestions, round.settings.category || '9', round.settings.difficulty || 'medium', round.settings.language || 'de');
       rounds.startRound(round, qs);
     }
-    reply.send(round.questions.map((q) => ({ id: q.id, type: q.type, text: q.text, options: q.options })));
+  reply.send(round.questions.map((q: any) => ({ id: q.id, type: q.type, text: q.text, options: q.options })));
   });
 
   app.post('/api/rounds/:id/finish', async (req, reply) => {

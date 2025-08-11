@@ -43,5 +43,9 @@
 
     "esModuleInterop": true,
     "resolveJsonModule": true,
-  }
+    "target": "ES2020",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext"
+  },
+  "include": ["src/**/*.ts"]
 }

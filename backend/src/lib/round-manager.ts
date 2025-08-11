@@ -1,4 +1,4 @@
-import type { Round, RoundSettings, Player, Question, Answer } from '../types/models';
+import type { Round, RoundSettings, Player, Question, Answer } from '../types/models.js';
 import { v4 as uuid } from 'uuid';
 
 export class RoundManager {
@@ -62,7 +62,7 @@ export class RoundManager {
   }
 
   getResults(round: Round) {
-    const scores = Array.from(round.players.values()).map((p) => {
+  const scores = Array.from(round.players.values()).map((p: Player) => {
       let points = 0;
       for (const q of round.questions) {
         const ans = p.answers[q.id];
@@ -73,7 +73,7 @@ export class RoundManager {
       }
       return { playerId: p.id, name: p.name, points };
     });
-    scores.sort((a, b) => b.points - a.points);
+  scores.sort((a: { points: number }, b: { points: number }) => b.points - a.points);
     return scores;
   }
 }

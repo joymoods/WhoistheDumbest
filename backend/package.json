@@ -11,8 +11,7 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "type": "commonjs",
+    "type": "module",
   "dependencies": {
     "@fastify/cors": "^11.1.0",
     "axios": "^1.11.0",
