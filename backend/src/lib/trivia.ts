@@ -26,14 +26,13 @@ function normalizeQuestion(q: any): Question {
   question.correct = q.correct_answer ? q.correct_answer.toLowerCase() : undefined;
   } else {
     const answers = [q.correct_answer, ...q.incorrect_answers].map((a: string) => he.decode(a));
-    question.options = answers.map((text) => ({ id: uuid(), text }));
-    if (question.options.length > 0) {
-      if (question.options[0]) {
-        question.correct = question.options[0].id;
-      }
+    const options = answers.map((text) => ({ id: uuid(), text }));
+    question.options = options;
+    if (options.length > 0) {
+      question.correct = options[0]!.id;
       // match correct by value
       const correctText = he.decode(q.correct_answer);
-      const correctOpt = question.options.find((o: { id: string; text: string }) => o.text === correctText);
+      const correctOpt = options.find((o) => o.text === correctText);
       if (correctOpt) question.correct = correctOpt.id;
     }
   }
