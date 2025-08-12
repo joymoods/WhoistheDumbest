@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { api } from '../lib/api';
 
 export default function Join() {
   const { code } = useParams();
@@ -7,17 +8,19 @@ export default function Join() {
   const [name, setName] = useState('');
 
   async function join() {
-    const res = await fetch(`/api/rounds/${code}/join`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ playerName: name }),
-    });
-    if (res.status === 409) {
-      alert('Runde bereits gestartet');
-      return;
+    try {
+      const data = await api<{ roundId: string; playerId: string }>(
+        `/rounds/${code}/join`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ playerName: name }),
+        }
+      );
+      navigate(`/lobby/${data.roundId}?player=${data.playerId}`);
+    } catch (err: any) {
+      alert(err.message === 'ROUND_ALREADY_STARTED' ? 'Runde bereits gestartet' : err.message);
     }
-    const data = await res.json();
-    navigate(`/lobby/${data.roundId}?player=${data.playerId}`);
   }
 
   return (

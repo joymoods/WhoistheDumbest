@@ -23,13 +23,13 @@ function normalizeQuestion(q: any): Question {
       { id: 'true', text: 'True' },
       { id: 'false', text: 'False' },
     ];
-  question.correct = q.correct_answer ? q.correct_answer.toLowerCase() : undefined;
+    question.correct = q.correct_answer ? q.correct_answer.toLowerCase() : undefined;
   } else {
     const answers = [q.correct_answer, ...q.incorrect_answers].map((a: string) => he.decode(a));
     const options = answers.map((text) => ({ id: uuid(), text }));
     question.options = options;
     if (options.length > 0) {
-      question.correct = options[0]!.id;
+      question.correct = options[0].id;
       // match correct by value
       const correctText = he.decode(q.correct_answer);
       const correctOpt = options.find((o) => o.text === correctText);

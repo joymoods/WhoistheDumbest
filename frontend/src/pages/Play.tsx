@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { io } from 'socket.io-client';
+import { api } from '../lib/api';
 
 interface Question {
   id: string;
@@ -17,7 +18,7 @@ export default function Play() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch(`/api/rounds/${id}/questions`).then(r => r.json()).then(setQuestions);
+    api<Question[]>(`/rounds/${id}/questions`).then(setQuestions).catch(console.error);
   }, [id]);
 
   const socket = io('/', { path: '/socket.io' });
@@ -31,8 +32,7 @@ export default function Play() {
   }
 
   async function finish() {
-    const res = await fetch(`/api/rounds/${id}/finish`, { method: 'POST' });
-    const data = await res.json();
+    const data = await api(`/rounds/${id}/finish`, { method: 'POST' });
     navigate(`/result/${id}`, { state: data });
   }
 

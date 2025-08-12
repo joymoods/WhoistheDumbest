@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { api } from '../lib/api';
 
 export default function Home() {
   const navigate = useNavigate();
@@ -10,12 +11,14 @@ export default function Home() {
   const [shuffle, setShuffle] = useState(false);
 
   async function createRound() {
-    const res = await fetch('/api/rounds', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ hostName: 'Host', settings: { numQuestions, difficulty, language, timeLimitSec, shuffle } }),
-    });
-    const data = await res.json();
+    const data = await api<{ roundId: string }>(
+      '/rounds',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ hostName: 'Host', settings: { numQuestions, difficulty, language, timeLimitSec, shuffle } }),
+      }
+    );
     navigate(`/lobby/${data.roundId}`);
   }
 
