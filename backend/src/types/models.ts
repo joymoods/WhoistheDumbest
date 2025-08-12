@@ -5,6 +5,7 @@ export interface Question {
   type: QuestionType;
   text: string;
   options?: { id: string; text: string }[];
+  // optional: external APIs may omit the correct answer
   correct?: string[] | string | number;
 }
 

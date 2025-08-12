@@ -61,19 +61,20 @@ export class RoundManager {
     round.status = 'ended';
   }
 
-  getResults(round: Round) {
-  const scores = Array.from(round.players.values()).map((p: Player) => {
-      let points = 0;
-      for (const q of round.questions) {
-        const ans = p.answers[q.id];
-        if (!ans) continue;
-        if ((q.type === 'single' || q.type === 'boolean') && q.correct !== undefined) {
-          if (ans.payload === q.correct) points += 1;
+  getResults(round: Round): { playerId: string; name: string; points: number }[] {
+    const scores: { playerId: string; name: string; points: number }[] =
+      Array.from(round.players.values()).map((p: Player) => {
+        let points = 0;
+        for (const q of round.questions) {
+          const ans = p.answers[q.id];
+          if (!ans) continue;
+          if ((q.type === 'single' || q.type === 'boolean') && q.correct !== undefined) {
+            if (ans.payload === q.correct) points += 1;
+          }
         }
-      }
-      return { playerId: p.id, name: p.name, points };
-    });
-  scores.sort((a: { points: number }, b: { points: number }) => b.points - a.points);
+        return { playerId: p.id, name: p.name, points };
+      });
+    scores.sort((a, b) => b.points - a.points);
     return scores;
   }
 }
